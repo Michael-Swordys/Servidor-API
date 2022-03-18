@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-
 class ServidorHttp
 {
     private TcpListener Controlador { get; set; }
@@ -49,10 +48,26 @@ class ServidorHttp
             if (textoRequisicao.Length > 0)
             {
                 Console.WriteLine($"\n{textoRequisicao}\n");
+                var bytesCabecalho = GerarCabecalho("HTTP/1.1", "text/html;charset=utf-8", 200, 0);
+                int bytesEnviados = conexao.Send(bytesCabecalho, bytesCabecalho.Length, 0);
                 conexao.Close();
+                Console.WriteLine($"\n {bytesEnviados} bytes foram enviados a requisição {numeroRequest}");
+
             }
         }
         Console.WriteLine($"Resquest {numeroRequest} Finalizada...");
 
     }
+
+    public byte[] GerarCabecalho(string versaoHttp, string tipoMime,
+       int codigoHttp, int qtdeBytes = 0)
+    {
+        StringBuilder texto = new StringBuilder();
+        texto.Append($"{versaoHttp} {codigoHttp}{Environment.NewLine}");
+        texto.Append($"Server: Servidor Http Simples 1.0{Environment.NewLine}");
+        texto.Append($"Content-Type: {tipoMime}{Environment.NewLine}");
+        texto.Append($"Content-Length: {qtdeBytes}{Environment.NewLine}{Environment.NewLine}");
+        return Encoding.UTF8.GetBytes(texto.ToString());
+    }
+
 }
