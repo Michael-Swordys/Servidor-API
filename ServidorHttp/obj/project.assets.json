@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dev003\\Documents\\ServidorHttp\\ServidorHttp.csproj",
+      "projectUniqueName": "C:\\Users\\Dev003\\Documents\\Servidor-API\\ServidorHttp\\ServidorHttp.csproj",
       "projectName": "ServidorHttp",
-      "projectPath": "C:\\Users\\Dev003\\Documents\\ServidorHttp\\ServidorHttp.csproj",
+      "projectPath": "C:\\Users\\Dev003\\Documents\\Servidor-API\\ServidorHttp\\ServidorHttp.csproj",
       "packagesPath": "C:\\Users\\Dev003\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dev003\\Documents\\ServidorHttp\\obj\\",
+      "outputPath": "C:\\Users\\Dev003\\Documents\\Servidor-API\\ServidorHttp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dev003\\AppData\\Roaming\\NuGet\\NuGet.Config",

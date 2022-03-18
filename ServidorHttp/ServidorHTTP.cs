@@ -14,10 +14,10 @@ class ServidorHttp
         this.Porta = porta;
         try
         {
-            this.Controlador = new TcpListener(IPAddress.Parse("172.27.32.1"), this.Porta);
+            this.Controlador = new TcpListener(IPAddress.Parse("127.0.0.1"), this.Porta);
             this.Controlador.Start();
             Console.WriteLine($"Servidor HTTP está rodando na porta {this.Porta}.");
-            Console.WriteLine($"Para acessar, digite no navegador: http://localhost:{this.Porta}.");
+            Console.WriteLine($"Para acessar, digite no navegador: http://localhost:{this.Porta}");
             Task ServidorHttpTask = Task.Run(() => AguardarRequests());
             ServidorHttpTask.GetAwaiter().GetResult();
         }
@@ -49,6 +49,7 @@ class ServidorHttp
             if (textoRequisicao.Length > 0)
             {
                 Console.WriteLine($"\n{textoRequisicao}\n");
+                conexao.Close();
             }
         }
         Console.WriteLine($"Resquest {numeroRequest} Finalizada...");
