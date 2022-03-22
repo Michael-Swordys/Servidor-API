@@ -171,5 +171,12 @@ class ServidorHttp
         this.TiposMime.Add("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");//Microsoft Word (OpenXML)
         this.TiposMime.Add(".eot", "application/vnd.ms-fontobject");//MS Embedded OpenType fonts	
         this.TiposMime.Add(".epub", "application/epub+zip");//Electronic publication (EPUB)
+        this.TiposMime.Add(".gz", "application/gzip");//GZip Compressed Archive	
+        this.TiposMime.Add(".gif", "image/gif");//Graphics Interchange Format (GIF)	
+        this.TiposMime.Add(".ico", "image/vnd.microsoft.icon");//Icon format
+        this.TiposMime.Add(".ics", "text/calendar");//iCalendar format	
+        this.TiposMime.Add(".jar", "application/java-archive");//Java Archive (JAR)	
+        this.TiposMime.Add(".jpeg", "image/jpeg");//JPEG images	
+        this.TiposMime.Add(".jpg", "image/jpeg");//JPEG images	
     }
 }
