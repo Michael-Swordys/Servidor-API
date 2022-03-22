@@ -28,7 +28,7 @@ class ServidorHttp
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Erro ao iniciar servidor na porta {this.Porta}:\n{e.Message}");
+            Console.WriteLine($"Erro ao inicia servidor na porta {this.Porta}:\n{e.Message}");
         }
     }
 
