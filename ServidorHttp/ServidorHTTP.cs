@@ -14,6 +14,8 @@ class ServidorHttp
 
 
     //Define a porta e IP do Servidor e trata se o mesmo está rodando
+
+
     public ServidorHttp(int porta = 8080)
     {
         this.Porta = porta;
@@ -33,7 +35,10 @@ class ServidorHttp
         }
     }
 
+
     //Aguarda uma resquest e fica em Loop aguardando outra com o Await
+
+
     private async Task AguardarRequests()
     {
         while (true)
@@ -45,12 +50,10 @@ class ServidorHttp
     }
 
 
-
-
-
     //Função que solicita e verifica nossa propriedade "Conexão" está conectada.
     //Faz o tratamento dos Bytes ( Já que um servidor aceita somente Bytes ) então precisando converter nossos tipos para bytes em nossa request e response.
     //Também realiza o tratamento de recurso solicitado na request.
+
 
     private void ProcessarRequest(Socket conexao, int numeroRequest)
     {
@@ -98,12 +101,7 @@ class ServidorHttp
     }
 
 
-
-
-
     //Adicionado, populando string's na URL e definindo alguns tipos --> ex: VersãoHttp.
-
-
 
 
     public byte[] GerarCabecalho(string versaoHttp, string tipoMime,
@@ -121,11 +119,7 @@ class ServidorHttp
     }
 
 
-
-
     //Função criada no começo do desenvolvimento desta aplicação mas descidi não utiliza-lá no momento, ela será utilizada futuramente e seu codigo será reutilizado e refatorado.
-
-
 
 
     private void CriarHtmlExemplo()
@@ -139,13 +133,7 @@ class ServidorHttp
     }
 
 
-
-
-
     //Esta função ler o arquivo e verifica se o mesmo existe
-
-
-
 
 
     public Byte[] LerArquivo(string recurso)
@@ -161,8 +149,6 @@ class ServidorHttp
 
 
     //Adiciona ao servidor a capacidade ler e interpretar tipos de arquivos comuns na Web 
-
-
 
     private void InserirTypesMime()
     {
