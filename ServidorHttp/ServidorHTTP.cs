@@ -11,8 +11,6 @@ class ServidorHttp
     private string HtmlExemplo { get; set; }
 
 
-
-
     public ServidorHttp(int porta = 8080)
     {
         this.Porta = porta;
@@ -54,8 +52,27 @@ class ServidorHttp
             if (textoRequisicao.Length > 0)
             {
                 Console.WriteLine($"\n{textoRequisicao}\n");
-                var bytesConteudo = Encoding.UTF8.GetBytes(this.HtmlExemplo, 0, this.HtmlExemplo.Length);
-                var bytesCabecalho = GerarCabecalho("HTTP/1.1", "text/html;charset=utf-8", 200, bytesConteudo.Length);
+                string[] linhas = textoRequisicao.Split("\r\n");
+                int iPrimeiroEspaco = linhas[0].IndexOf(' ');
+                int iSegundoEspaco = linhas[0].LastIndexOf(' ');
+                string metodoHttp = linhas[0].Substring(0, iPrimeiroEspaco);
+                string recursoBuscado = linhas[0].Substring(
+                iPrimeiroEspaco + 1, iSegundoEspaco - iPrimeiroEspaco - 1);
+                string versaoHttp = linhas[0].Substring(iSegundoEspaco + 1);
+                iPrimeiroEspaco = linhas[1].IndexOf(' ');
+                string nomeHost = linhas[1].Substring(iPrimeiroEspaco + 1);
+                byte[] bytesCabecalho = null;
+                var bytesConteudo = LerArquivo(recursoBuscado);
+                if (bytesConteudo.Length > 0)
+                {
+                    bytesCabecalho = GerarCabecalho(versaoHttp, "text/html;charset=utf-8", 200, bytesConteudo.Length);
+                }
+                else
+                {
+                    bytesConteudo = Encoding.UTF8.GetBytes(@"<h1>Erro 404 - Arquivo não encontrado <\h1>");
+                    bytesCabecalho = GerarCabecalho(versaoHttp, "text/html;charset=utf-8", 404, bytesConteudo.Length); ;
+                }
+
                 int bytesEnviados = conexao.Send(bytesCabecalho, bytesCabecalho.Length, 0);
                 bytesEnviados += conexao.Send(bytesConteudo, bytesConteudo.Length, 0);
 
@@ -88,5 +105,18 @@ class ServidorHttp
         html.Append("<h1>Página Estática</h1></body></html>");
         this.HtmlExemplo = html.ToString();
     }
+
+    public Byte[] LerArquivo(string recurso)
+    {
+        string diretorio = "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\wwwDinamico";
+        string caminho = diretorio + recurso.Replace("/", "\\");
+        if (File.Exists(caminho))
+        {
+            return File.ReadAllBytes(caminho);
+        }
+        return new byte[0];
+    }
+
+
 
 }
