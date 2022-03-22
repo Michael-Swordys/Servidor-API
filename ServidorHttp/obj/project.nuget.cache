@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QM83U5ejqxCh0M8OvmSUoNVnSrXOYh0gaR82O3DNICYhC7OTfR0Eru7nBWQeeo3BBCLzn9Y/tmB//tdSDi1CUQ==",
+  "dgSpecHash": "SwGuEEBeQVYDTcj8oAqB13KLwNDCkXBzJHnc+5RQl6Ggd0u00Igke4Zs4iqTzYTUhEiSJMeP8d7PHUKNoeVYXQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dev003\\Documents\\Servidor-API\\ServidorHttp\\ServidorHttp.csproj",
+  "projectFilePath": "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\ServidorHttp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
