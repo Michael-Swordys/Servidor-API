@@ -9,8 +9,11 @@ class ServidorHttp
     private int QtdeRequests { get; set; }
 
     private string HtmlExemplo { get; set; }
+    public SortedList<string, string> TiposMime { get; set; }
 
 
+
+    //Define a porta e IP do Servidor e trata se o mesmo está rodando
     public ServidorHttp(int porta = 8080)
     {
         this.Porta = porta;
@@ -30,6 +33,7 @@ class ServidorHttp
         }
     }
 
+    //Aguarda uma resquest e fica em Loop aguardando outra com o Await
     private async Task AguardarRequests()
     {
         while (true)
@@ -39,6 +43,14 @@ class ServidorHttp
             Task task = Task.Run(() => ProcessarRequest(conexao, this.QtdeRequests));
         }
     }
+
+
+
+
+
+    //Função que solicita e verifica nossa propriedade "Conexão" está conectada.
+    //Faz o tratamento dos Bytes ( Já que um servidor aceita somente Bytes ) então precisando converter nossos tipos para bytes em nossa request e response.
+    //Também realiza o tratamento de recurso solicitado na request.
 
     private void ProcessarRequest(Socket conexao, int numeroRequest)
     {
@@ -70,7 +82,7 @@ class ServidorHttp
                 else
                 {
                     bytesConteudo = Encoding.UTF8.GetBytes(@"<h1>Erro 404 - Arquivo não encontrado <\h1>");
-                    bytesCabecalho = GerarCabecalho(versaoHttp, "text/html;charset=utf-8", 404, bytesConteudo.Length); ;
+                    bytesCabecalho = GerarCabecalho(versaoHttp, "text/html;charset=utf-8", 404, bytesConteudo.Length);
                 }
 
                 int bytesEnviados = conexao.Send(bytesCabecalho, bytesCabecalho.Length, 0);
@@ -85,6 +97,15 @@ class ServidorHttp
 
     }
 
+
+
+
+
+    //Adicionado, populando string's na URL e definindo alguns tipos --> ex: VersãoHttp.
+
+
+
+
     public byte[] GerarCabecalho(string versaoHttp, string tipoMime,
        int codigoHttp, int qtdeBytes = 0)
     {
@@ -94,7 +115,18 @@ class ServidorHttp
         texto.Append($"Content-Type: {tipoMime}{Environment.NewLine}");
         texto.Append($"Content-Length: {qtdeBytes}{Environment.NewLine}{Environment.NewLine}");
         return Encoding.UTF8.GetBytes(texto.ToString());
+
+
+
     }
+
+
+
+
+    //Função criada no começo do desenvolvimento desta aplicação mas descidi não utiliza-lá no momento, ela será utilizada futuramente e seu codigo será reutilizado e refatorado.
+
+
+
 
     private void CriarHtmlExemplo()
     {
@@ -105,6 +137,16 @@ class ServidorHttp
         html.Append("<h1>Página Estática</h1></body></html>");
         this.HtmlExemplo = html.ToString();
     }
+
+
+
+
+
+    //Esta função ler o arquivo e verifica se o mesmo existe
+
+
+
+
 
     public Byte[] LerArquivo(string recurso)
     {
@@ -118,5 +160,30 @@ class ServidorHttp
     }
 
 
+    //Adiciona ao servidor a capacidade ler e interpretar tipos de arquivos comuns na Web 
 
+
+
+    private void InserirTypesMime()
+    {
+        this.TiposMime = new SortedList<string, string>();
+        this.TiposMime.Add(".html", "text/html;charset=utf-8"); //HTML
+        this.TiposMime.Add(".htm", "text/html;charset=utf-8"); //HTML
+        this.TiposMime.Add(".css", "text/css"); //Css
+        this.TiposMime.Add(".aac", "audio/aac"); //Audio
+        this.TiposMime.Add(".abw", "application/x-abiword"); //Document
+        this.TiposMime.Add(".arc", "application/x-freearc"); //Archive document (multiple files embedded)
+        this.TiposMime.Add(".avi", "video/x-msvideo");//AVI: Audio Video Interleave
+        this.TiposMime.Add(".azw", "application/vnd.amazon.ebook");//application/vnd.amazon.ebook
+        this.TiposMime.Add(".bin", "application/octet-stream");//Any kind of binary data
+        this.TiposMime.Add(".bmp", "image/bmp");//Windows OS/2 Bitmap Graphics
+        this.TiposMime.Add(".bz", "application/x-bzip");//BZip archive
+        this.TiposMime.Add(".bz2", "application/x-bzip2");//BZip2 archive
+        this.TiposMime.Add(".csh", "application/x-csh");//Shell script
+        this.TiposMime.Add(".csv", "texte/csv");//Comma-separated values (CSV)	
+        this.TiposMime.Add(".doc", "application/msword");//Microsoft Word	
+        this.TiposMime.Add("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");//Microsoft Word (OpenXML)
+        this.TiposMime.Add(".eot", "application/vnd.ms-fontobject");//MS Embedded OpenType fonts	
+        this.TiposMime.Add(".epub", "application/epub+zip");//Electronic publication (EPUB)
+    }
 }
