@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 class ServidorHttp
 {
@@ -15,6 +10,7 @@ class ServidorHttp
 
     private string HtmlExemplo { get; set; }
     private SortedList<string, string> TiposMime { get; set; }
+    private SortedList<string, string> DiretoriosHost { get; set; }
 
 
 
@@ -26,6 +22,7 @@ class ServidorHttp
         this.Porta = porta;
         this.CriarHtmlExemplo();
         this.InserirTypesMime();
+        this.PopularDiretorioHost();
         try
         {
             this.Controlador = new TcpListener(IPAddress.Parse("127.0.0.1"), this.Porta);
@@ -84,7 +81,7 @@ class ServidorHttp
                 string nomeHost = linhas[1].Substring(iPrimeiroEspaco + 1);
                 byte[] bytesCabecalho = null;
                 byte[] bytesConteudo = null;
-                FileInfo FileInfomation = new FileInfo(DiretorioFisico(recursoBuscado));
+                FileInfo FileInfomation = new FileInfo(DiretorioFisico(nomeHost, recursoBuscado));
                 if (FileInfomation.Exists)
                 {
                     if (TiposMime.ContainsKey(FileInfomation.Extension.ToLower()))
@@ -126,9 +123,6 @@ class ServidorHttp
         texto.Append($"Content-Type: {tipoMime}{Environment.NewLine}");
         texto.Append($"Content-Length: {qtdeBytes}{Environment.NewLine}{Environment.NewLine}");
         return Encoding.UTF8.GetBytes(texto.ToString());
-
-
-
     }
 
 
@@ -228,11 +222,22 @@ class ServidorHttp
     }
 
 
+    public void PopularDiretorioHost()
+    {
+        this.DiretoriosHost = new SortedList<string, string>();
+        this.DiretoriosHost.Add("localhost", "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\www\\localhost");
+        this.DiretoriosHost.Add("michael.com", "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\www\\michael.com");
+
+    }
+
+
     //Verifica se o arquivo existe e retorna o mesmo.
 
-    public string DiretorioFisico(string arquivo)
+    public string DiretorioFisico(string host, string arquivo)
     {
-        string caminhoArquivo = "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\wwwDinamico" + arquivo.Replace("/", "\\");
+        string diretor = this.DiretoriosHost[host.Split(":")[0]];
+        string caminhoArquivo = diretor + arquivo.Replace("/", "\\");
         return caminhoArquivo;
     }
+
 }
