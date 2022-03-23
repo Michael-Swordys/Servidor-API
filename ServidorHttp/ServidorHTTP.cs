@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
+using System.Web;
 
 class ServidorHttp
 {
@@ -9,7 +14,7 @@ class ServidorHttp
     private int QtdeRequests { get; set; }
 
     private string HtmlExemplo { get; set; }
-    public SortedList<string, string> TiposMime { get; set; }
+    private SortedList<string, string> TiposMime { get; set; }
 
 
 
@@ -20,6 +25,7 @@ class ServidorHttp
     {
         this.Porta = porta;
         this.CriarHtmlExemplo();
+        this.InserirTypesMime();
         try
         {
             this.Controlador = new TcpListener(IPAddress.Parse("127.0.0.1"), this.Porta);
@@ -156,6 +162,7 @@ class ServidorHttp
         this.TiposMime.Add(".html", "text/html;charset=utf-8"); //HTML
         this.TiposMime.Add(".htm", "text/html;charset=utf-8"); //HTML
         this.TiposMime.Add(".css", "text/css"); //Css
+        this.TiposMime.Add(".js", "text/javascript");// JavaScript programming 
         this.TiposMime.Add(".aac", "audio/aac"); //Audio
         this.TiposMime.Add(".abw", "application/x-abiword"); //Document
         this.TiposMime.Add(".arc", "application/x-freearc"); //Archive document (multiple files embedded)
@@ -177,6 +184,57 @@ class ServidorHttp
         this.TiposMime.Add(".ics", "text/calendar");//iCalendar format	
         this.TiposMime.Add(".jar", "application/java-archive");//Java Archive (JAR)	
         this.TiposMime.Add(".jpeg", "image/jpeg");//JPEG images	
-        this.TiposMime.Add(".jpg", "image/jpeg");//JPEG images	
+        this.TiposMime.Add(".jpg", "image/jpeg");//JPEG images
+        this.TiposMime.Add(".json", "application/json");// Application/json
+        this.TiposMime.Add(".jsonld", "application/ld+json");// Json-LD
+        this.TiposMime.Add(".midi", "audio/midi audio/x-midi");// Musical Instrument Digital Interface (MIDI)
+        this.TiposMime.Add(".mid", "audio/midi audio/x-midi");// Musical Instrument Digital Interface (MIDI)	
+        this.TiposMime.Add(".mjs", "text/javascript");//JavaScript module
+        this.TiposMime.Add(".mp3", "audio/mpeg"); //Mp3 audio
+        this.TiposMime.Add(".mpeg", "video/mpeg");//MPEG video
+        this.TiposMime.Add(".mpkg", "application/vnd.apple.installer+xml");// Apple Installer package
+        this.TiposMime.Add(".odp", "application/vnd.oasis.opendocument.presentation");//OpenDocument presentation document
+        this.TiposMime.Add(".ods", "application/vnd.oasis.opendocument.spreadsheet");//OpenDocument spreadsheet document	
+        this.TiposMime.Add(".odt", "application/vnd.oasis.opendocument.text");//OpenDocument text document	
+        this.TiposMime.Add(".oga", "audio/ogg");//OGG audio
+        this.TiposMime.Add(".ogv", "video/ogg");//OGG video
+        this.TiposMime.Add(".ogx", "application/ogg");//OGG	
+        this.TiposMime.Add(".opus", "audio/opus");//	Opus audio
+        this.TiposMime.Add(".otf", "font/otf");//OpenType font	
+        this.TiposMime.Add(".png", "image/png");//Portable Network Graphics
+        this.TiposMime.Add(".pdf", "application/pdf");//Adobe Portable Document Format (PDF)
+        this.TiposMime.Add(".php", "application/x-httpd-php");//Hypertext Preprocessor (Personal Home Page)	
+        this.TiposMime.Add(".ppt", "application/vnd.ms-powerpoint");// Microsoft PowerPoint
+        this.TiposMime.Add(".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");//Microsoft PowerPoint (OpenXML)	
+        this.TiposMime.Add(".rar", "application/vnd.rar");// RAR archive	
+        this.TiposMime.Add(".rtf", "application/rtf");// Rich Text Format (RTF)
+        this.TiposMime.Add(".sh", "application/x-sh");//Bourne shell script	
+        this.TiposMime.Add(".svg", "image/svg+xml");//	Scalable Vector Graphics (SVG)
+        this.TiposMime.Add(".swf", "application/x-shockwave-flash");//Small web format (SWF) or Adobe Flash document
+        this.TiposMime.Add(".tar", "application/x-tar");// Tape Archive (TAR)	
+        this.TiposMime.Add(".tif", "image/tiff");// Tagged Image File Format (TIFF)
+        this.TiposMime.Add(".tiff", "image/tiff");// Tagged Image File Format (TIFF)
+        this.TiposMime.Add(".ts", "video/mp2t");// MPEG transport stream	
+        this.TiposMime.Add(".ttf", "font/ttf");//TrueType Font	
+        this.TiposMime.Add(".txt", "text/plain");//Text (generally ASCII or ISO 8859-n)
+        this.TiposMime.Add(".vsd", "application/vnd.visi");// Microsoft Visio
+        this.TiposMime.Add(".wav", "audio/wav");// Waveform Audio Format
+        this.TiposMime.Add(".weba", "audio/webm");// WEBM audio
+        this.TiposMime.Add(".webm", "video/webm");//WEBM video
+        this.TiposMime.Add(".webp", "image/webp");//WEBP image
+        this.TiposMime.Add(".woff", "font/woff");//Web Open Font Format (WOFF)	
+        this.TiposMime.Add(".woff2", "font/woff2");//Web Open Font Format (WOFF)
+        this.TiposMime.Add(".xhtml", "application/xhtml+xml");//XHTML
+        this.TiposMime.Add(".xls", "application/vnd.ms-excel");// Microsoft Excel
+        this.TiposMime.Add(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//Microsoft Excel (OpenXML)	
+        this.TiposMime.Add(".xml", "text/xml");//if not readable from casual users (RFC 3023, section 3)text/xml if readable from casual users (RFC 3023, section 3)
+        this.TiposMime.Add(".xul", "application/vnd.mozilla.xul+xml");//	XUL
+        this.TiposMime.Add(".zip", "application/zip");//ZIP archive
+        this.TiposMime.Add(".3gp", "video/3gpp");// audio/video container -> if it doesn't contain video = audio/3gpp
+        this.TiposMime.Add(".3g2", "video/3gpp2");// 3GPP2 audio/video container if it doesn't contain video audio/3gpp
+        this.TiposMime.Add(".7z", "application/x-7z-compressed");//7-zip archive	    
     }
+
+
+
 }
