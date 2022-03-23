@@ -83,10 +83,17 @@ class ServidorHttp
                 iPrimeiroEspaco = linhas[1].IndexOf(' ');
                 string nomeHost = linhas[1].Substring(iPrimeiroEspaco + 1);
                 byte[] bytesCabecalho = null;
-                var bytesConteudo = LerArquivo(recursoBuscado);
-                if (bytesConteudo.Length > 0)
+                byte[] bytesConteudo = null;
+                FileInfo FileInfomation = new FileInfo(DiretorioFisico(recursoBuscado));
+                if (FileInfomation.Exists)
                 {
-                    bytesCabecalho = GerarCabecalho(versaoHttp, "text/html;charset=utf-8", 200, bytesConteudo.Length);
+                    if (TiposMime.ContainsKey(FileInfomation.Extension.ToLower()))
+                    {
+                        bytesConteudo = File.ReadAllBytes(FileInfomation.FullName);
+                        string tipoMime = TiposMime[FileInfomation.Extension.ToLower()];
+
+                        bytesCabecalho = GerarCabecalho(versaoHttp, tipoMime, 200, bytesConteudo.Length);
+                    }
                 }
                 else
                 {
@@ -136,21 +143,6 @@ class ServidorHttp
         html.Append("<title>http</title></head><body>");
         html.Append("<h1>Página Estática</h1></body></html>");
         this.HtmlExemplo = html.ToString();
-    }
-
-
-    //Esta função ler o arquivo e verifica se o mesmo existe
-
-
-    public Byte[] LerArquivo(string recurso)
-    {
-        string diretorio = "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\wwwDinamico";
-        string caminho = diretorio + recurso.Replace("/", "\\");
-        if (File.Exists(caminho))
-        {
-            return File.ReadAllBytes(caminho);
-        }
-        return new byte[0];
     }
 
 
@@ -227,7 +219,7 @@ class ServidorHttp
         this.TiposMime.Add(".xhtml", "application/xhtml+xml");//XHTML
         this.TiposMime.Add(".xls", "application/vnd.ms-excel");// Microsoft Excel
         this.TiposMime.Add(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//Microsoft Excel (OpenXML)	
-        this.TiposMime.Add(".xml", "text/xml");//if not readable from casual users (RFC 3023, section 3)text/xml if readable from casual users (RFC 3023, section 3)
+        this.TiposMime.Add(".xml", "application/xml");//if not readable from casual users (RFC 3023, section 3)text/xml if readable from casual users (RFC 3023, section 3)
         this.TiposMime.Add(".xul", "application/vnd.mozilla.xul+xml");//	XUL
         this.TiposMime.Add(".zip", "application/zip");//ZIP archive
         this.TiposMime.Add(".3gp", "video/3gpp");// audio/video container -> if it doesn't contain video = audio/3gpp
@@ -236,5 +228,11 @@ class ServidorHttp
     }
 
 
+    //Verifica se o arquivo existe e retorna o mesmo.
 
+    public string DiretorioFisico(string arquivo)
+    {
+        string caminhoArquivo = "C:\\Users\\Dev003\\Documents\\Servidor-HTTP\\ServidorHttp\\wwwDinamico" + arquivo.Replace("/", "\\");
+        return caminhoArquivo;
+    }
 }
